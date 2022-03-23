@@ -1,48 +1,48 @@
 {% extends 'base.html' %}
 {% block title %}
   Пост {{ post.text|truncatechars:30 }}
-{% endblock title %}
+{% endblock %}
 {% block content %}
-  <div class="container py-5">
-    <div class="row">
-      <aside class="col-12 col-md-3">
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">
-            Дата публикации: {{ post.pub_date|date:"d E Y" }}
-          </li>
-          {% if post.group %}
+    <main>
+      <div class="container py-5">
+       <div class="row">
+        <aside class="col-12 col-md-3">
+          <ul class="list-group list-group-flush">
             <li class="list-group-item">
-              Группа: {{ post.group.title }}
-              <p>
+              Дата публикации: {{ post.pub_date|date:"j E Y" }}
+            </li>
+              {% if post.group %}
+              <li class="list-group-item">
+                Группа: <a>{{ post.group.title }}</a>
                 <a href="{% url 'posts:group_list' post.group.slug %}">
                   все записи группы
                 </a>
-              </p>
+                {% endif %}
+              </li>
+              <li class="list-group-item">
+                Автор: {{ post.author.get_full_name }}
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+              Всего постов автора: {{ post.author.posts.count }} 
             </li>
-          {% endif %}
             <li class="list-group-item">
-              Автор: {{ post.author.get_full_name }}
+              <a href="{% url 'posts:profile' post.author.username %}">все посты пользователя</a>
+              </a>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-            Всего постов автора:  <span >{{ post_count }}</span>
-          </li>
-          <li class="list-group-item">
-            <a href="{% url 'posts:profile' post.author.username %}">
-              все посты пользователя
-            </a>
-          </li>
-        </ul>
-      </aside>
-      <article class="col-12 col-md-9">
-        <p>
-          {{ post.text }}
-        </p>
-          {% if user.username == post.author.username %}
-            <a class="btn btn-primary" href="{% url 'posts:post_edit' post.id %}">
-              Редактировать
-            </a>
-          {% endif %}
-      </article>
-    </div> 
-  </div>
-{% endblock content %}
+          </ul>
+        </aside>
+        <article class="col-12 col-md-9">
+          <p>
+            {{ post.text }}
+          </p>
+          {% if post.author == request.user %}
+          <a class="btn btn-primary" href="{% url 'posts:post_edit' post.pk %}">
+           редактировать запись
+          </a>
+          {% endif%}
+        </article>
+      </div>
+    </main>
+    {% include 'posts/includes/paginator.html' %}
+{% endblock %}
+

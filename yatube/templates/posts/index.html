@@ -1,32 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}
-  {{ title }}
-{% endblock title %}
+Последнее обновление на сайте
+{% endblock %}
 {% block content %}
   <div class="container py-5">
-    {% for post in page_obj %}
-      {% if forloop.first %}
-        <h1>{{ title }}</h1>
-      {% endif %}
-      <article>
-        <ul>
-          <li>
-            Автор: {{ post.author.get_full_name }}
-          </li>
-          <li>
-            Дата публикации: {{ post.pub_date|date:"d E Y" }}
-          </li>
-        </ul>
-        <p>
-          {{ post.text }}
-        </p>
-        {% if post.group %}   
-          <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы "{{ post.group }}"</a>
-        {% endif %} 
-      </article>
-      {% if not forloop.last %}
-        <hr>
-      {% endif %}
-    {% endfor %}
-  </div>
-{% endblock content %}
+    <h1>Последнее обновление на сайте</h1>
+  {% for post in page_obj %}
+  <ul>
+    <li>Автор: {{ post.author.get_full_name }}</li>
+    <li>Дата публикации: {{ post.pub_date|date:"d E Y" }}</li>
+  </ul>      
+     <p>{{ post.text }}</p>
+  {% if post.group is not None %}
+  <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы</a>
+  {%endif%}
+{% if not forloop.last %}<hr>{% endif %}
+{% endfor %}
+{% include 'posts/includes/paginator.html' %}
+{% endblock %} 

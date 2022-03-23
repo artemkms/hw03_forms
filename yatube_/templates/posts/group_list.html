@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}
+  Записи сообщества {{ group.title }}
+{% endblock title %}
+{% block content %}
+  <div class="container py-5">
+    {% for post in page_obj %}
+      {% if forloop.first %}
+        <h1>{{ group.title }}</h1>
+          <p>
+            {{ group.description }}
+          </p>
+      {% endif %}
+      <article>
+        <ul>
+          <li>
+            Автор: 
+            <a href="{% url 'posts:profile' post.author.username %}">
+              {{ post.author.get_full_name }}
+            </a>
+          </li>
+          <li>
+            Дата публикации: {{ post.pub_date|date:"d E Y" }}
+          </li>
+        </ul>      
+        <p>
+          {{ post.text }}
+        </p>         
+      </article>
+      {% if not forloop.last %}
+        <hr>
+      {% endif %}
+    {% endfor %} 
+  </div>
+{% endblock content %}
