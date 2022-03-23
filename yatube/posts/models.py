@@ -29,5 +29,5 @@ class Post(models.Model):
     )
 
     def __str__(self):
-        # выводим текст поста 
+        # выводим текст поста
         return self.text
