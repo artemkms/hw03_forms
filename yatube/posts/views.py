@@ -27,7 +27,7 @@ def group_posts(request, slug):
 
 def profile(request, username):
     author = get_object_or_404(User, username=username)
-    post_list = Post.objects.filter(author=author)
+    post_list = author.posts.all()
     context = {'page_obj': get_page_context(post_list, request),
                'author': author,
                }
